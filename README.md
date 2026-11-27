@@ -2,18 +2,23 @@
 
 An interactive classroom tool for building and visualizing Merkle Trees — the same hash structures used in Bitcoin block headers and Layer 2 rollup commitments.
 
-**[Live demo](#getting-started)** · React 19 · Vite · TypeScript · Web Crypto API
+**[Live demo](https://dimikog.github.io/merkle-root-lab/)** · React 19 · Vite · TypeScript · Web Crypto API
 
 ---
 
 ## Features
 
-- Build a Merkle tree from any number of pre-computed transaction hashes
-- Visualize every level from leaves to root, with labels and explanations
-- Highlight duplicated nodes when an odd leaf count forces pairing
-- Load sample hashes for quick classroom demos
-- Copy the Merkle Root to the clipboard
-- Export the full tree as JSON
+- Build a Merkle tree from data (the app hashes each line) or from pre-computed 64-hex hashes
+- Three rule sets: **Classroom** (simple), **Bitcoin-style** (raw bytes, double SHA-256, byte-reversed display; reproduces block 170's root) and **RFC 6962 style** (leaf/node prefixes, odd node passed up); each rule can also be set by hand
+- See every level from leaves to root; odd nodes are shown as a copy (duplicate rule) or passed up (promote rule)
+- **Tamper demo:** change one character in a leaf and see which nodes change
+- **Merkle proof:** generate the sibling path for a leaf, verify it against the root, optionally corrupt one hash
+- Copy the root, export the tree as JSON
+- Unit tests against independent reference implementations and a real Bitcoin vector: `npm test`
+
+### What the lab does not claim
+
+Only the *Bitcoin-style* preset follows Bitcoin's byte rules. *Classroom* hashes the hex text of the children, which is easy to follow by hand but does not match any real chain. Sparse Merkle trees, Merkle-Patricia tries and on-chain verification are not covered yet.
 
 ---
 
@@ -38,72 +43,13 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 | `npm run build` | Type-check and build for production |
 | `npm run preview` | Preview the production build locally |
 | `npm run lint` | Run ESLint |
+| `npm test` | Run the unit tests (Node built-in runner) |
 
 ---
 
 ## How to use the app
 
-1. Enter how many transaction hashes (leaves) you have.
-2. Paste each pre-computed `Tx_Hash` into the input fields. The app **does not re-hash** your inputs — it uses them directly as leaves.
-3. Click **Calculate Merkle Root**.
-4. Review every intermediate hash level and the final Merkle Root.
-5. Use **Load Sample Hashes** to populate the form with example values for a classroom demo.
-
----
-
-## Concepts
-
-### What is a Merkle Tree?
-
-A **Merkle Tree** is a binary hash tree where:
-
-- Every **leaf node** holds a transaction hash (a pre-existing hash, not raw data).
-- Every **parent node** is the SHA-256 of its two children's hashes concatenated:
-  `parent = SHA-256(left_hash + right_hash)`
-- This continues level by level until a single hash remains — the **Merkle Root**.
-
-The structure allows anyone to prove a transaction is in a block with only O(log n) hashes (a *Merkle proof*), rather than the full dataset.
-
-### What is a Merkle Root?
-
-The **Merkle Root** is the single hash at the top of the tree. It is a compact cryptographic fingerprint of every transaction in the set. If any transaction changes, the root changes entirely.
-
-The root is stored in the **block header** and is what miners and validators commit to when sealing a block.
-
-### Why do rollups use Merkle Roots?
-
-Layer 2 rollups (Optimistic Rollups, ZK-Rollups) process thousands of transactions off-chain and need to commit a summary to Ethereum L1. Instead of posting every transaction, they post a single **Merkle Root**:
-
-- **Cheap:** one 32-byte value on L1 instead of megabytes of transaction data.
-- **Verifiable:** anyone can verify a specific transaction is included using a Merkle proof.
-- **Tamper-evident:** changing any transaction changes the root, making fraud detectable.
-
-### Why are odd leaves duplicated?
-
-Merkle Trees pair nodes two-by-two. If a level has an odd number of nodes, there is no partner for the last node. The convention (used in Bitcoin and most blockchains) is to **duplicate the last node**, pair it with itself, and hash the pair to produce a parent. This ensures the tree is always a complete binary tree.
-
----
-
-## Project structure
-
-```
-src/
-  App.tsx          # Main UI component
-  App.css          # Styles
-  types.ts         # TypeScript interfaces
-  utils/
-    merkle.ts      # calculateMerkleRoot() + sample data
-```
-
-## Tech stack
-
-- React 19 + Vite
-- TypeScript
-- Web Crypto API (`crypto.subtle.digest`) — no external crypto libraries
-- Browser-only, no backend
-
----
-
-## License
-
-Educational use. Feel free to fork and adapt for teaching.
+1. Pick the rules (or leave **Classroom**) and choose whether the leaves are data or hashes.
+2. Enter one leaf per line, or use **Load sample data** / **Load Bitcoin block 170**, then **Build tree**.
+3. **Change one leaf** to see how a single change reaches the root.
+4. **Prove that a leaf is in the tree**: generate the proof, then verify it. After tampering, verification runs against the original root and fails.

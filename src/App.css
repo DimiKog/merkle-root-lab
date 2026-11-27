@@ -261,3 +261,78 @@ body {
   .actions { flex-direction: column; }
   .btn { width: 100%; text-align: center; }
 }
+
+/* ── Lab v1 additions ─────────────────────────────────────────────────────── */
+:root { --violet: #a78bfa; --violet-bg: #15112b; --blue: #60a5fa; --red-bg: #2a1414; }
+
+.card h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.9rem; }
+.hint { color: var(--muted); font-size: 0.9rem; margin: 0.5rem 0 0.9rem; }
+.fineprint { font-size: 0.85rem; }
+.meta-line { color: var(--muted); font-size: 0.82rem; margin: 0.4rem 0; }
+code { font-family: var(--font-mono); font-size: 0.82em; color: var(--text); word-break: break-all; }
+
+select {
+  background: var(--bg); color: var(--text); border: 1px solid var(--border);
+  border-radius: 6px; padding: 0.45rem 0.6rem; font-size: 0.9rem; max-width: 100%;
+}
+select:focus { outline: none; border-color: var(--accent); }
+
+.advanced { margin: 0.5rem 0 1rem; border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.9rem; }
+.advanced summary { cursor: pointer; color: var(--muted); font-size: 0.9rem; }
+.toggle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem 1.5rem; margin-top: 0.9rem; }
+.toggle-grid label { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.85rem; color: var(--muted); }
+.toggle-grid label.check, label.check.inline { flex-direction: row; align-items: center; gap: 0.5rem; }
+label.check.inline { color: var(--muted); font-size: 0.88rem; }
+@media (max-width: 640px) { .toggle-grid { grid-template-columns: 1fr; } }
+
+.mode-row { margin-top: 0.75rem; }
+.segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex-wrap: wrap; }
+.segmented button {
+  background: transparent; color: var(--muted); border: 0; padding: 0.5rem 0.9rem;
+  font-size: 0.85rem; cursor: pointer;
+}
+.segmented button.active { background: var(--accent); color: #fff; }
+
+.leaf-textarea {
+  width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.7rem; font-family: var(--font-mono); font-size: 0.8rem; resize: vertical;
+  margin-top: 0.6rem;
+}
+.leaf-textarea:focus { outline: none; border-color: var(--accent); }
+.leaf-textarea.invalid { border-color: var(--red); }
+
+.tag { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 999px; vertical-align: middle; margin-left: 0.5rem; }
+.tag.danger { background: var(--red-bg); color: var(--red); border: 1px solid var(--red); }
+
+.promo-label { font-weight: 700; color: var(--violet); }
+.node.promoted { border-color: var(--violet); background: var(--violet-bg); }
+.promo-badge {
+  margin-left: 0.4rem; font-size: 0.65rem; padding: 0 0.35rem; border-radius: 4px;
+  background: var(--violet); color: #0f1117; font-weight: 700;
+}
+
+.legend { display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 0.4rem 0 0.9rem; }
+.chip { font-size: 0.75rem; padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+.chip.path { border-color: var(--blue); color: var(--blue); }
+.chip.sibling { border-color: var(--green); color: var(--green); }
+.chip.changed { border-color: var(--red); color: var(--red); }
+
+.node.path { border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue) inset; }
+.node.sibling { border-color: var(--green); box-shadow: 0 0 0 1px var(--green) inset; }
+.node.changed { border-color: var(--red); background: var(--red-bg); }
+.node.changed .node-hash { color: var(--red); }
+
+.root-hash.orig { color: var(--muted); }
+h3.orig { color: var(--muted); margin-top: 0.8rem; }
+
+.compare { margin-top: 0.8rem; display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.88rem; color: var(--muted); }
+
+.proof-table { width: 100%; border-collapse: collapse; margin: 0.6rem 0; font-size: 0.85rem; }
+.proof-table th, .proof-table td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--border); }
+.proof-table th { color: var(--muted); font-weight: 600; }
+.mono { font-family: var(--font-mono); }
+
+.verify { margin-top: 0.9rem; padding: 0.9rem 1rem; border-radius: 8px; border: 1px solid var(--border); }
+.verify.ok { border-color: var(--green); background: #0b1f19; color: var(--green); }
+.verify.fail { border-color: var(--red); background: var(--red-bg); color: var(--red); }
+.verify .trace { margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem; color: var(--muted); font-size: 0.82rem; }
